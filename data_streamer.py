@@ -20,15 +20,23 @@ for index, row in df.iterrows():
     }
 
     try:
-        # Send to IEP #2
-        response = requests.post("http://127.0.0.1:5002/ingest-sensor-data",
-                                 headers={"Content-Type": "application/json"},
-                                 data=json.dumps(payload))
+         # Send to IEP #1 (Failure Risk Detection)
+        risk_response = requests.post("http://127.0.0.1:5001/predict-risk",
+                                       headers={"Content-Type": "application/json"},
+                                       data=json.dumps(payload))
+        risk_output = risk_response.json()
 
-        print(f"Row {index} ➜ IEP #2 Response: {response.json()}")
+        # Send to IEP #2 (Anomaly Detection)
+        anomaly_response = requests.post("http://127.0.0.1:5002/ingest-sensor-data",
+                                          headers={"Content-Type": "application/json"},
+                                          data=json.dumps(payload))
+        anomaly_output = anomaly_response.json()
+
+        print(f"\nRow {index}:")
+        print(f"IEP #1 - Risk Detection ➜ {risk_output}")
+        print(f"IEP #2 - Anomaly Detection ➜ {anomaly_output}")
 
     except Exception as e:
-        print(f"Error sending data at row {index}: {e}")
-
+        print(f"Error at row {index}: {e}")
     # Wait to simulate real-time (adjust as needed)
-    time.sleep(1)
+    time.sleep(5)
