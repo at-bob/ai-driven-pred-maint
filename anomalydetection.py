@@ -111,13 +111,32 @@ y_true = df['Fault_Condition'].apply(lambda x: 1 if x in [1, 2, 3] else 0).value
 import numpy as np
 
 X_pred = autoencoder.predict(X_test)
-reconstruction_error = np.mean(np.square(X_test - X_pred), axis=1)
+# Calculate per-sensor reconstruction errors
+reconstruction_errors_per_sensor = np.square(X_test - X_pred)
+
+# Overall reconstruction error (keep for thresholding)
+reconstruction_error = np.mean(reconstruction_errors_per_sensor, axis=1)
 
 # Find best threshold based on F1 score
 optimal_threshold = find_optimal_threshold(y_true, reconstruction_error, metric='f1')
 
 # Apply it
 autoencoder_preds = (reconstruction_error > optimal_threshold).astype(int)
+
+sensor_names = df.drop(columns=['Fault_Condition']).columns.tolist()
+
+# Save sensor names to a file
+import json
+with open("iep2_anomalydetection/model/sensor_names.json", "w") as f:
+    json.dump(sensor_names, f)
+
+for i, is_anomaly in enumerate(autoencoder_preds):
+    if is_anomaly:
+        sensor_errors = reconstruction_errors_per_sensor[i]
+        # Get indices of top 2 sensors contributing most to anomaly
+        top_sensors_idx = np.argsort(sensor_errors)[-2:]
+        flagged_sensors = [sensor_names[j] for j in top_sensors_idx]
+        print(f"Anomaly detected at index {i} ➜ Likely sensors: {flagged_sensors}")
 
 from sklearn.metrics import classification_report
 
