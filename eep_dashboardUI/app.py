@@ -4,7 +4,7 @@ import os
 from streamlit_autorefresh import st_autorefresh
 
 # ====== Configuration ======
-LOG_FILE = "eep_data_log.csv"
+LOG_FILE = "/app/log/eep_data_log.csv"
 
 # ====== Functions ======
 
@@ -39,7 +39,6 @@ with st.spinner('Fetching latest system status...'):
         st.markdown(f"## Status: {overall_status}")
         st.write(f"**Risk Level:** {latest_data['risk_status']} ({float(latest_data['risk_probability'])*100:.1f}%)")
         st.write(f"**Anomaly Status:** {latest_data['anomaly_status']}")
-        st.write(f"**Reconstruction Error:** {float(latest_data['reconstruction_error']):.5f}")
         st.write(f"**Flagged Sensors:** {latest_data['flagged_sensors']}")
         st.write(f"**Last Update:** {latest_data['timestamp']}")
     else:

@@ -1,0 +1,12 @@
+timestamp,risk_status,risk_probability,anomaly_status,flagged_sensors
+2025-04-27 22:32:38,No Risk,0.4863,Anomaly Detected,"Torque, Fuel_Efficiency"
+2025-04-27 22:32:43,No Risk,0.4429,Normal,
+2025-04-27 22:32:48,No Risk,0.4713,Normal,
+2025-04-27 22:32:53,No Risk,0.4945,Normal,
+2025-04-27 22:32:58,No Risk,0.4715,Normal,
+2025-04-27 22:33:03,No Risk,0.4999,Normal,
+2025-04-27 22:33:09,Risk of Failure,0.6678,Anomaly Detected,"Vibration_Z, Power_Output (kW)"
+2025-04-27 22:33:14,Risk of Failure,0.6552,Normal,
+2025-04-27 22:33:19,No Risk,0.4588,Normal,
+2025-04-27 22:33:24,Risk of Failure,0.5504,Anomaly Detected,"RPM, Operational_Mode"
+2025-04-27 22:33:29,No Risk,0.4617,Normal,
