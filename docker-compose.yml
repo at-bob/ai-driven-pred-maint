@@ -1,0 +1,36 @@
+
+services:
+  iep1:
+    build: ./iep1_failuredetection
+    ports:
+      - "5001:5001"
+
+  iep2:
+    build: ./iep2_anomalydetection
+    ports:
+      - "5002:5002"
+
+  eep_backend:
+    build: ./eep_backend
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./shared_log:/app/log
+
+  eep_dashboard:
+    build: ./eep_dashboardUI
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./shared_log:/app/log
+    depends_on:
+      - eep_backend
+
+  data_streamer:
+    build: ./data_streamer
+    volumes:
+      - ./datasets:/app/datasets
+    depends_on:
+      - iep1
+      - iep2
+      - eep_backend
